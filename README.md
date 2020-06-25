@@ -1,27 +1,27 @@
-# kotlinプログラムをvscodeで開発・デバッグする
+# Debugging Kotlin program using vscode
 
 ## TL;DR
 
-fwcd.kotlinのextensionをインストールすること
+Install fwcd.kotlin extension.
 
-## 概要
+## Summary
 
-多くのQiita記事では、kotlinのプログラムをVSCodeで実行することを説明したが、肝心なデバッグを触れていない。
+Many sites demostrate how to code and run Kotlin programs, without showing how to debug it.
 
-自分で試し成功した結果を皆さんに共有できれば。(基本Mac向けだが、ほとんどはwindowsと共通する)
+I want to share what I tried and got worked, if someone else face the same situation. (I tried on Mac, but the concept is common for Windows PC.)
 
 
-## 前提条件
+## Prerequisites
 
 * vscode
 * Java(OpenJDK)
 
-上記のインストール手順は省略
+The instructions are skipped to install the above prerequisites.
 
 
-## 構築手順
+## Procedures
 
-### 1. kotlin と gradle
+### 1. Install kotlin and gradle
 
 
 ```shell
@@ -29,58 +29,28 @@ fwcd.kotlinのextensionをインストールすること
 % brew install gradle
 ```
 
-### 2. kotlin sample appの作成
+### 2. create a kotlin sample app
 
 ```shell
 % mkdir kt-sample-app
 % cd kt-sample-app
 % gradle init --type=kotlin-application
-
-# 出てくる選択肢は全部デフォルトでOK
-
-# 以下のフォルダ構造が自動生成される
-% tree .
-.
-├── build.gradle.kts
-├── gradle
-│   └── wrapper
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties
-├── gradlew
-├── gradlew.bat
-├── settings.gradle.kts
-└── src
-    ├── main
-    │   ├── kotlin
-    │   │   └── kotlin
-    │   │       └── sample
-    │   │           └── app
-    │   │               └── App.kt
-    │   └── resources
-    └── test
-        ├── kotlin
-        │   └── kotlin
-        │       └── sample
-        │           └── app
-        │               └── AppTest.kt
-        └── resources
+# Select all default choices is OK
  
-# 疎通する
+# Have a try is everything is ok
 % ./gradlew build
 
 BUILD SUCCESSFUL in 3s
 8 actionable tasks: 8 executed
 ```
 
-### 3. VSCodeの拡張のインストール
+### 3. Install VSCode extensions
 
 ```
-# 以下のvscode extensionの設定を行う
-
 % mkdir -p .vscode
 % vi .vscode/extensions.json
 
------以下の内容を入力-----
+----- Input contents as below -----
 {
     "recommendations": [
         "fwcd.kotlin",
@@ -88,22 +58,21 @@ BUILD SUCCESSFUL in 3s
     ]
 }
 
-# ここからvscodeを起動
+# Launch vscode
 % code .
 
 ```
 
-「recommended extensionをインストールしますか」のダイアログが表示されるので、
-「Install All」でextensions.jsonに書いた２つのextensionをインストールする
+Select "Install All" to the dialog showed, which will install the 2 extensions wrote above.
 
-ここまでApp.ktファイルを開けば、syntax highlightとauto compleletionが効くようになる
+Open App.kt file, and you will see "syntax highlight", "auto compleletion" working.
 
-### 4. ビルド・デバッグの設定
+### 4. Settings to build and debug
 
 ```
 % vi .vscode/tasks.json
 
------以下の内容を入力-----
+----- Input the content below -----
 
 {
     "version": "2.0.0",
@@ -121,39 +90,30 @@ BUILD SUCCESSFUL in 3s
         {
             "label": "run",
             "type": "shell",
-            "command": "./gradlew run"
+            "command": "./gradlew run",
+            "problemMatcher": []
         },
         {
             "label": "test",
             "type": "shell",
-            "command": "./gradlew test"
-        },
-        {
-            "label": "clean",
-            "type": "shell",
-            "command": "./gradlew clean",
+            "command": "./gradlew test",
             "problemMatcher": []
-        },
-        {
-            "label": "check",
-            "type": "shell",
-            "command": "./gradlew check",
-            "problemMatcher": []
+
         }
     ]
 }
 
 ```
 
-vscodeのメニュー Terminal -> Run Task... で runなどを選ぶ。
-これで、 gradlewのbuild / run / check / clean / testのタスクを実施できる
+In vscode menu,  Terminal -> Run Task... 
+You can execute  gradlew's build / run / test tasks.
 
-最後は、デバッグの設定
+Finally the debug settings:
 
 ```
 % vi .vscode/launch.json
 
------以下の内容を入力-----
+----- Input content below -----
 
 {
     "version": "0.2.0",
@@ -171,12 +131,8 @@ vscodeのメニュー Terminal -> Run Task... で runなどを選ぶ。
 
 ```
 
-※ mainClassのところは自分のAppに合わせて書き換えてください。
+* Rewrite the mainClass to fit to your project.
 
-適当にbreakpointを設定して、vscodeのDebugタブ -> Runボタンでデバッグができる
-
-
-
-
+Set some breakpoint,  debug the program by vscode's Debug tab  -> Run button. 
 
 
