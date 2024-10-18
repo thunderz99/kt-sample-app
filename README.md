@@ -122,7 +122,7 @@ Finally the debug settings:
             "type": "kotlin",
             "request": "launch",
             "name": "Kotlin Launch",
-            "projectRoot": "${workspaceFolder}",
+            "projectRoot": "${workspaceFolder}/app",
             "mainClass": "kt/sample/app/AppKt",
             "preLaunchTask": "build"
         }
